@@ -1,14 +1,22 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
+    "target": "ES2019",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "ESNext",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "build",
-    "target": "ESNext",
-    "sourceMap": true,
-    "allowJs": false,
-    "noEmit": true // Do not compile the JS (or TS) files in this project on build
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {}
   },
-  "include": ["src"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

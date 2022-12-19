@@ -28,11 +28,13 @@ module.exports = {
       {
         test: /\.js(x?)$/,
         include: path.join(__dirname, 'src'),
+        exclude: /node_modules/,
         use: 'babel-loader',
       },
       {
         test: /\.(ts(x?))?$/,
         include: path.join(__dirname, 'src'),
+        exclude: /node_modules/,
         use: [
           {
             loader: 'ts-loader',
@@ -72,6 +74,6 @@ module.exports = {
     }),
   ].filter(Boolean),
   resolve: {
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
 };
