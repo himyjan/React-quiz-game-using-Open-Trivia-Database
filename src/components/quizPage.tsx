@@ -4,8 +4,31 @@ import clsx from 'clsx';
 import api from '../utils/api';
 import RightWrongStatisticsChart from './ui/rightWrongStatisticsChart';
 
+type dataType = {
+  results: dataResultsType;
+};
+
+type dataResultsType = {
+  category: string;
+  correct_answer: string;
+  difficulty: string;
+  incorrect_answers: string[];
+  question: string;
+  type: string;
+};
+
 const Quiz = () => {
-  let [isOpen, setIsOpen] = useState(true);
+  let [isOpen, setIsOpen] = useState(false);
+  let [data, setData] = useState<dataType>({
+    results: {
+      category: '',
+      correct_answer: '',
+      difficulty: '',
+      incorrect_answers: [],
+      question: '',
+      type: '',
+    },
+  });
 
   function closeModal() {
     setIsOpen(false);
@@ -15,23 +38,26 @@ const Quiz = () => {
     setIsOpen(true);
   }
 
-  let data;
+  async function getApiData() {
+    setData(await api.getQuiz());
+  }
+
   useEffect(() => {
-    data = api.getQuiz().then((result) => {
+    api.getQuiz().then((result) => {
       console.log(result);
     });
   }, []);
 
   return (
     <>
-      <div className=''>{data}</div>
+      <div className=''>{data.results.category}</div>
       <div className='fixed inset-0 flex items-center justify-center'>
         <button
           type='button'
           onClick={openModal}
           className='rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
         >
-          Open dialog
+          Open statistics chart
         </button>
       </div>
       <Transition appear show={isOpen} as={Fragment}>

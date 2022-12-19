@@ -2,11 +2,13 @@ import React from 'react';
 import { AxisOptions, Chart } from 'react-charts';
 import useDemoConfig from './useDemoConfig';
 import ResizableBox from './ResizableBox';
+import ComboBox from './comboBox';
 
 const RightWrongStatisticsChart = () => {
   const { data, randomizeData } = useDemoConfig({
-    series: 3,
+    series: 2,
     dataType: 'ordinal',
+    datums: 1,
   });
 
   const primaryAxis = React.useMemo<
@@ -34,7 +36,8 @@ const RightWrongStatisticsChart = () => {
       <button onClick={randomizeData}>Randomize Data</button>
       <br />
       <br />
-      <ResizableBox>
+      <ResizableBox width={300}>
+        <ComboBox />
         <Chart
           options={{
             data,

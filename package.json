@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.7",
+    "@heroicons/react": "^2.0.13",
     "clsx": "^1.2.1",
     "ofetch": "^1.0.0",
     "react": "^18.2.0",
