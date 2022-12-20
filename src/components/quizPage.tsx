@@ -5,24 +5,35 @@ import { showNotification } from '@mantine/notifications';
 import clsx from 'clsx';
 import api from '../utils/api';
 import RightWrongStatisticsChart from './ui/rightWrongStatisticsChart';
+import { dataType } from 'src/types/apiDataType';
+import { chartDataType } from 'src/types/chartDataType';
 
-type dataType = {
-  results: dataResultsType[];
-};
-
-type dataResultsType = {
-  category: string;
-  correct_answer: string;
-  difficulty: string;
-  incorrect_answers: string[];
-  question: string;
-  type: string;
-};
+const chartData: chartDataType[] = [
+  {
+    label: 'right',
+    data: [
+      {
+        primary: 'Ordinal Group 0',
+        secondary: 52,
+      },
+    ],
+  },
+  {
+    label: 'wrong',
+    data: [
+      {
+        primary: 'Ordinal Group 0',
+        secondary: 88,
+      },
+    ],
+  },
+];
 
 const Quiz = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [key, setKey] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [score, setScore] = useState(false);
   const [data, setData] = useState<dataType>({
     results: [
       {
@@ -183,7 +194,7 @@ const Quiz = () => {
                     Right/wrong answers chart
                   </Dialog.Title>
                   <div className='mt-2  '>
-                    <RightWrongStatisticsChart />
+                    <RightWrongStatisticsChart data={chartData} />
                   </div>
 
                   <div className='mt-4'>

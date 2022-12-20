@@ -1,16 +1,15 @@
 import React from 'react';
 import { AxisOptions, Chart } from 'react-charts';
-import useDemoConfig from './useDemoConfig';
 import ResizableBox from './ResizableBox';
 import ComboBox from './comboBox';
+import { chartDataType } from 'src/types/chartDataType';
 
-const RightWrongStatisticsChart = () => {
-  const { data, randomizeData } = useDemoConfig({
-    series: 2,
-    dataType: 'ordinal',
-    datums: 1,
-  });
+type RightWrongStatisticsChartProps = {
+  data: chartDataType[];
+};
 
+const RightWrongStatisticsChart = (props: RightWrongStatisticsChartProps) => {
+  const data = props.data;
   const primaryAxis = React.useMemo<
     AxisOptions<typeof data[number]['data'][number]>
   >(
@@ -26,6 +25,7 @@ const RightWrongStatisticsChart = () => {
     () => [
       {
         getValue: (datum) => datum.secondary,
+        elementType: 'bar',
       },
     ],
     []
@@ -33,8 +33,8 @@ const RightWrongStatisticsChart = () => {
 
   return (
     <>
-      <ComboBox />
       <ResizableBox width={300}>
+        <ComboBox />
         <Chart
           options={{
             data,
