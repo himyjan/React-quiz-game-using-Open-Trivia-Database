@@ -14,7 +14,7 @@ const chartData: chartDataType[] = [
     data: [
       {
         primary: 'Ordinal Group 0',
-        secondary: 52,
+        secondary: 0,
       },
     ],
   },
@@ -23,7 +23,7 @@ const chartData: chartDataType[] = [
     data: [
       {
         primary: 'Ordinal Group 0',
-        secondary: 88,
+        secondary: 0,
       },
     ],
   },
@@ -86,6 +86,17 @@ const Quiz = () => {
     console.log('the value:', theValue);
     const theText = e.currentTarget.textContent;
     console.log('the text: ', theText);
+    if (theText === data.results[0].correct_answer) {
+      showNotification({
+        title: 'Right',
+        message: 'Hey there, your code is awesome! 🤥',
+      });
+    } else {
+      showNotification({
+        title: 'Wrong',
+        message: 'Hey there, your code is awesome! 🤥',
+      });
+    }
   }
 
   async function getApiQuiz() {
@@ -108,7 +119,7 @@ const Quiz = () => {
           onComplete={() => {
             getApiQuiz();
             showNotification({
-              title: 'Default notification',
+              title: 'New Quiz',
               message: 'Hey there, your code is awesome! 🤥',
             });
             // do your stuff here
@@ -124,17 +135,21 @@ const Quiz = () => {
         {data.results[0].question}
       </div>
 
-      {data.results[0].incorrect_answers.map((answer, index) => (
-        <button
-          type='button'
-          onClick={quizAnswerClick}
-          value='this is the value'
-          className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-          key={answer}
-        >
-          {answer}
-        </button>
-      ))}
+      {[...data.results[0].incorrect_answers, data.results[0].correct_answer]
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value) // suffle
+        .map((answer, index) => (
+          <button
+            type='button'
+            onClick={quizAnswerClick}
+            value='this is the value'
+            className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+            key={answer}
+          >
+            {answer}
+          </button>
+        ))}
 
       <div className='fixed flex top-0 left-0'>
         <button
