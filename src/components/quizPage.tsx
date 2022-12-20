@@ -1,11 +1,14 @@
 import { useState, useEffect, Fragment } from 'react';
+import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Dialog, Transition } from '@headlessui/react';
+import { Group, Button } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import clsx from 'clsx';
 import api from '../utils/api';
 import RightWrongStatisticsChart from './ui/rightWrongStatisticsChart';
 
 type dataType = {
-  results: dataResultsType;
+  results: dataResultsType[];
 };
 
 type dataResultsType = {
@@ -19,15 +22,18 @@ type dataResultsType = {
 
 const Quiz = () => {
   let [isOpen, setIsOpen] = useState(false);
+  let [right, setRight] = useState(0);
   let [data, setData] = useState<dataType>({
-    results: {
-      category: '',
-      correct_answer: '',
-      difficulty: '',
-      incorrect_answers: [],
-      question: '',
-      type: '',
-    },
+    results: [
+      {
+        category: '',
+        correct_answer: '',
+        difficulty: '',
+        incorrect_answers: [],
+        question: '',
+        type: '',
+      },
+    ],
   });
 
   function closeModal() {
@@ -38,20 +44,65 @@ const Quiz = () => {
     setIsOpen(true);
   }
 
-  async function getApiData() {
-    setData(await api.getQuiz());
+  async function getApiQuiz() {
+    const results = await api.getQuiz();
+    setData(results);
   }
 
-  useEffect(() => {
-    api.getQuiz().then((result) => {
-      console.log(result);
-    });
-  }, []);
+  // useEffect(() => {
+  //   getApiQuiz();
+  // }, []);
 
   return (
-    <>
-      <div className=''>{data.results.category}</div>
-      <div className='fixed inset-0 flex items-center justify-center'>
+    <div className='flex flex-col'>
+      <div className='flex justify-center mt-[3%]'>
+        <CountdownCircleTimer
+          isPlaying
+          duration={15}
+          colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+          colorsTime={[7, 5, 2, 0]}
+          onComplete={() => {
+            getApiQuiz();
+            showNotification({
+              title: 'Default notification',
+              message: 'Hey there, your code is awesome! 🤥',
+            });
+            // do your stuff here
+            return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
+          }}
+        >
+          {({ remainingTime }) => <div>{remainingTime}</div>}
+        </CountdownCircleTimer>
+      </div>
+
+      <div className='flex justify-center my-[15px]'>Question</div>
+      <div className='flex max-w-[680px] text-[24px] text-blue-800'>
+        {data.results[0].question}
+      </div>
+
+      <button
+        type='button'
+        onClick={openModal}
+        className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+      >
+        {data.results[0].incorrect_answers[0]}
+      </button>
+      <button
+        type='button'
+        onClick={openModal}
+        className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+      >
+        {data.results[0].incorrect_answers[1]}
+      </button>
+      <button
+        type='button'
+        onClick={openModal}
+        className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+      >
+        {data.results[0].incorrect_answers[2]}
+      </button>
+
+      <div className='fixed top-0 left-0 inset-0'>
         <button
           type='button'
           onClick={openModal}
@@ -117,7 +168,7 @@ const Quiz = () => {
           </div>
         </Dialog>
       </Transition>
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
+import { MantineProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 import './index.css';
 import App from './App';
 
@@ -8,6 +10,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <MantineProvider withNormalizeCSS withGlobalStyles>
+      <NotificationsProvider>
+        <App />
+      </NotificationsProvider>
+    </MantineProvider>
   </React.StrictMode>
 );
