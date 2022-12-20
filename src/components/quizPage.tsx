@@ -33,7 +33,7 @@ const Quiz = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [key, setKey] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [score, setScore] = useState(false);
+  const [score, setScore] = useState({});
   const [data, setData] = useState<dataType>({
     results: [
       {
@@ -86,14 +86,20 @@ const Quiz = () => {
     console.log('the value:', theValue);
     const theText = e.currentTarget.textContent;
     console.log('the text: ', theText);
+    const difficulty = data.results[0].difficulty;
     if (theText === data.results[0].correct_answer) {
       showNotification({
-        title: 'Right',
+        title: 'correct answer',
         message: 'Hey there, your code is awesome! 🤥',
       });
+      setScore((preScore: any) =>
+        preScore[difficulty].hasOwnProperty(difficulty)
+          ? (preScore[difficulty] = 1)
+          : (preScore[difficulty] += 1)
+      );
     } else {
       showNotification({
-        title: 'Wrong',
+        title: 'wrong answer',
         message: 'Hey there, your code is awesome! 🤥',
       });
     }
@@ -119,7 +125,7 @@ const Quiz = () => {
           onComplete={() => {
             getApiQuiz();
             showNotification({
-              title: 'New Quiz',
+              title: 'time up',
               message: 'Hey there, your code is awesome! 🤥',
             });
             // do your stuff here
