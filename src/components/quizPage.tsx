@@ -1,7 +1,6 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, Fragment } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Dialog, Transition } from '@headlessui/react';
-import { Group, Button } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import clsx from 'clsx';
 import api from '../utils/api';
@@ -21,9 +20,10 @@ type dataResultsType = {
 };
 
 const Quiz = () => {
-  let [isOpen, setIsOpen] = useState(false);
-  let [right, setRight] = useState(0);
-  let [data, setData] = useState<dataType>({
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [key, setKey] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [data, setData] = useState<dataType>({
     results: [
       {
         category: '',
@@ -44,20 +44,53 @@ const Quiz = () => {
     setIsOpen(true);
   }
 
+  function startQuiz() {
+    setIsPlaying(true);
+    getApiQuiz();
+  }
+
+  function stopQuiz() {
+    resetQuiz();
+  }
+
+  function resetQuiz() {
+    setIsPlaying(false);
+    setKey((prevKey) => prevKey + 1);
+    setData({
+      results: [
+        {
+          category: '',
+          correct_answer: '',
+          difficulty: '',
+          incorrect_answers: [],
+          question: '',
+          type: '',
+        },
+      ],
+    });
+  }
+
+  function quizAnswerClick(e: React.MouseEvent<HTMLButtonElement>) {
+    const theValue = e.currentTarget.value;
+    console.log('the value:', theValue);
+    const theText = e.currentTarget.textContent;
+    console.log('the text: ', theText);
+  }
+
   async function getApiQuiz() {
     const results = await api.getQuiz();
     setData(results);
   }
 
-  // useEffect(() => {
-  //   getApiQuiz();
-  // }, []);
-
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col justify-center'>
+      <div className='flex justify-center font-bold text-lg text-green-800'>
+        Open Trivia API Quiz Game
+      </div>
       <div className='flex justify-center mt-[3%]'>
         <CountdownCircleTimer
-          isPlaying
+          key={key}
+          isPlaying={isPlaying}
           duration={15}
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[7, 5, 2, 0]}
@@ -75,40 +108,44 @@ const Quiz = () => {
         </CountdownCircleTimer>
       </div>
 
-      <div className='flex justify-center my-[15px]'>Question</div>
+      <div className='flex justify-center my-[15px] text-2xl'>Question</div>
       <div className='flex max-w-[680px] text-[24px] text-blue-800'>
         {data.results[0].question}
       </div>
 
-      <button
-        type='button'
-        onClick={openModal}
-        className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-      >
-        {data.results[0].incorrect_answers[0]}
-      </button>
-      <button
-        type='button'
-        onClick={openModal}
-        className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-      >
-        {data.results[0].incorrect_answers[1]}
-      </button>
-      <button
-        type='button'
-        onClick={openModal}
-        className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-      >
-        {data.results[0].incorrect_answers[2]}
-      </button>
+      {data.results[0].incorrect_answers.map((answer, index) => (
+        <button
+          type='button'
+          onClick={quizAnswerClick}
+          value='this is the value'
+          className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+          key={answer}
+        >
+          {answer}
+        </button>
+      ))}
 
-      <div className='fixed top-0 left-0 inset-0'>
+      <div className='fixed flex top-0 left-0'>
         <button
           type='button'
           onClick={openModal}
           className='rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
         >
           Open statistics chart
+        </button>
+        <button
+          type='button'
+          onClick={startQuiz}
+          className='rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+        >
+          Start Quiz
+        </button>
+        <button
+          type='button'
+          onClick={stopQuiz}
+          className='rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+        >
+          Stop Quiz
         </button>
       </div>
       <Transition appear show={isOpen} as={Fragment}>
