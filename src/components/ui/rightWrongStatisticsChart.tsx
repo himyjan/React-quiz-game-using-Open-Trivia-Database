@@ -33,11 +33,8 @@ const RightWrongStatisticsChart = () => {
 
   return (
     <>
-      <button onClick={randomizeData}>Randomize Data</button>
-      <br />
-      <br />
+      <ComboBox />
       <ResizableBox width={300}>
-        <ComboBox />
         <Chart
           options={{
             data,
