@@ -1,0 +1,31 @@
+export type scoreBoardType = {
+  easy?: scoreType;
+  medium?: scoreType;
+  hard?: scoreType;
+  'General Knowledge'?: scoreType;
+  'Entertainment: Books'?: scoreType;
+  'Entertainment: Film'?: scoreType;
+  'Entertainment: Music'?: scoreType;
+  'Entertainment: Musicals &amp; Theatres'?: scoreType;
+  'Entertainment: Television'?: scoreType;
+  'Entertainment: Video Games'?: scoreType;
+  'Entertainment: Board Games'?: scoreType;
+  'Science &amp; Nature'?: scoreType;
+  'Science: Computers'?: scoreType;
+  'Science: Mathematics'?: scoreType;
+  Mythology?: scoreType;
+  Sports?: scoreType;
+  Geography?: scoreType;
+  History?: scoreType;
+  Politics?: scoreType;
+  Art?: scoreType;
+  Celebrities?: scoreType;
+  Animals?: scoreType;
+  Vehicles?: scoreType;
+  'Entertainment: Comics'?: scoreType;
+  'Science: Gadgets'?: scoreType;
+  'Entertainment: Japanese Anime &amp; Manga'?: scoreType;
+  'Entertainment: Cartoon &amp; Animations'?: scoreType;
+};
+
+type scoreType = [number, number];

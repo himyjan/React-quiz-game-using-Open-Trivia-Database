@@ -1,7 +1,6 @@
 import React from 'react';
 import { AxisOptions, Chart } from 'react-charts';
 import ResizableBox from './ResizableBox';
-import ComboBox from './comboBox';
 import { chartDataType } from 'src/types/chartDataType';
 
 type RightWrongStatisticsChartProps = {
@@ -34,7 +33,6 @@ const RightWrongStatisticsChart = (props: RightWrongStatisticsChartProps) => {
   return (
     <>
       <ResizableBox width={300}>
-        <ComboBox />
         <Chart
           options={{
             data,
