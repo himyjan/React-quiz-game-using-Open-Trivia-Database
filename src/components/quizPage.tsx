@@ -103,8 +103,10 @@ const Quiz = () => {
         label: 'right',
         data: [
           {
-            primary: selected.name ?? '',
-            secondary: 12,
+            primary: selected.name,
+            secondary: score.hasOwnProperty(selected.name)
+              ? (score as any)[selected.name][0]
+              : 0,
           },
         ],
       },
@@ -112,8 +114,10 @@ const Quiz = () => {
         label: 'wrong',
         data: [
           {
-            primary: selected.name ?? '',
-            secondary: 5,
+            primary: selected.name,
+            secondary: score.hasOwnProperty(selected.name)
+              ? (score as any)[selected.name][1]
+              : 0,
           },
         ],
       },
