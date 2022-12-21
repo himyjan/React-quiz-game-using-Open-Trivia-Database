@@ -165,9 +165,7 @@ const Quiz = () => {
   function quizAnswerClick(e: React.MouseEvent<HTMLButtonElement>) {
     if (isAnswered.current === true) return;
     const theValue = e.currentTarget.value;
-    console.log('the value:', theValue);
     const theText = e.currentTarget.textContent;
-    console.log('the text: ', theText);
     const difficulty = data.results[0].difficulty;
     const category = data.results[0].category;
     if (theText === data.results[0].correct_answer) {
@@ -200,7 +198,6 @@ const Quiz = () => {
       });
     }
     isAnswered.current = true;
-    console.log(score);
   }
 
   async function getApiQuiz() {
@@ -208,6 +205,24 @@ const Quiz = () => {
     setData(results);
     isAnswered.current = false;
   }
+
+  type renderTimeProps = {
+    remainingTime: number;
+  };
+
+  const renderTime = ({ remainingTime }: renderTimeProps) => {
+    if (remainingTime === 0) {
+      return <div className='text-[24px] text-red-600'>Too lale...</div>;
+    }
+
+    return (
+      <div className='flex flex-col justify-center text-lg text-black'>
+        <div className='flex justify-center text-[20px]'>Remaining</div>
+        <div className='flex justify-center text-[36px]'>{remainingTime}</div>
+        <div className='flex justify-center text-[24px]'>seconds</div>
+      </div>
+    );
+  };
 
   return (
     <div className='flex flex-col justify-center'>
@@ -225,17 +240,22 @@ const Quiz = () => {
             getApiQuiz();
             showNotification({
               title: 'time up',
-              message: 'Hey there, your code is awesome! 🤥',
+              message: '',
             });
             // do your stuff here
             return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
           }}
         >
-          {({ remainingTime }) => <div>{remainingTime}</div>}
+          {renderTime}
         </CountdownCircleTimer>
       </div>
 
       <div className='flex justify-center my-[15px] text-2xl'>Question</div>
+      <div className='flex max-w-[680px] justify-center text-[16px] text-yellow-800'>
+        difficulty: {data.results[0].difficulty}
+        <br />
+        difficulty: {data.results[0].category}
+      </div>
       <div className='flex max-w-[680px] text-[24px] text-blue-800'>
         {data.results[0].question}
       </div>
