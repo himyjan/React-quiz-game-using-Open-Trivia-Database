@@ -164,6 +164,14 @@ const Quiz = () => {
 
   function quizAnswerClick(e: React.MouseEvent<HTMLButtonElement>) {
     if (isAnswered.current === true) return;
+    if (isPlaying === true) {
+      setIsPlaying(false);
+      setTimeout(() => {
+        setKey((prevKey) => prevKey + 1);
+        getApiQuiz();
+        setIsPlaying(true);
+      }, 1500);
+    }
     const theValue = e.currentTarget.value;
     const theText = e.currentTarget.textContent;
     const difficulty = data.results[0].difficulty;
@@ -242,6 +250,7 @@ const Quiz = () => {
               title: 'time up',
               message: '',
             });
+            setIsPlaying(true);
             // do your stuff here
             return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
           }}
@@ -254,7 +263,7 @@ const Quiz = () => {
       <div className='flex max-w-[680px] justify-center text-[16px] text-yellow-800'>
         difficulty: {data.results[0].difficulty}
         <br />
-        difficulty: {data.results[0].category}
+        category: {data.results[0].category}
       </div>
       <div className='flex max-w-[680px] text-[24px] text-blue-800'>
         {data.results[0].question}

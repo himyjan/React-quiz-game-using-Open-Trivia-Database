@@ -25,6 +25,7 @@ const RightWrongStatisticsChart = (props: RightWrongStatisticsChartProps) => {
       {
         getValue: (datum) => datum.secondary,
         elementType: 'bar',
+        min: 0,
       },
     ],
     []
