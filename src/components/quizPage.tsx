@@ -1,4 +1,4 @@
-import { useState, Fragment, useRef } from 'react';
+import { useState, Fragment, useRef, useMemo } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Combobox, Dialog, Transition } from '@headlessui/react';
 import { showNotification } from '@mantine/notifications';
@@ -269,21 +269,7 @@ const Quiz = () => {
         {data.results[0].question}
       </div>
 
-      {[...data.results[0].incorrect_answers, data.results[0].correct_answer]
-        .map((value) => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value) // suffle
-        .map((answer, index) => (
-          <button
-            type='button'
-            onClick={quizAnswerClick}
-            value='this is the value'
-            className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-            key={answer}
-          >
-            {answer}
-          </button>
-        ))}
+      {useMemo(() => showAnswer(data, quizAnswerClick), [data])}
 
       <div className='fixed flex top-0 left-0'>
         <button
@@ -308,6 +294,13 @@ const Quiz = () => {
           Stop Quiz
         </button>
       </div>
+
+      {scoreBarPopupModule()}
+    </div>
+  );
+
+  function scoreBarPopupModule() {
+    return (
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={closeModal}>
           <Transition.Child
@@ -336,9 +329,7 @@ const Quiz = () => {
                 <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
                   <Dialog.Title
                     as='h3'
-                    className={clsx(
-                      'text-lg font-medium leading-6 text-gray-900'
-                    )}
+                    className='text-lg font-medium leading-6 text-gray-900'
                   >
                     Right/wrong answers chart
                   </Dialog.Title>
@@ -439,8 +430,29 @@ const Quiz = () => {
           </div>
         </Dialog>
       </Transition>
-    </div>
-  );
+    );
+  }
 };
 
 export default Quiz;
+
+function showAnswer(
+  data: dataType,
+  quizAnswerClick: (e: React.MouseEvent<HTMLButtonElement>) => void
+) {
+  return [...data.results[0].incorrect_answers, data.results[0].correct_answer]
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value) // suffle
+    .map((answer, index) => (
+      <button
+        type='button'
+        onClick={quizAnswerClick}
+        value='this is the value'
+        className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+        key={answer}
+      >
+        {answer}
+      </button>
+    ));
+}
