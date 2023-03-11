@@ -10,6 +10,7 @@
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.16",
     "@mantine/core": "^6.0.1",
+    "@mantine/hooks": "^6.0.1",
     "@mantine/notifications": "^6.0.1",
     "clsx": "^1.2.1",
     "ofetch": "^1.0.1",
