@@ -19,6 +19,8 @@ module.exports = {
   mode: isDevelopment ? 'development' : 'production',
   devServer: {
     client: { overlay: false },
+    open: true,
+    hot: true, 
   },
   entry: {
     main: './src/' + entries,
