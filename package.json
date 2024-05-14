@@ -50,7 +50,7 @@
     "tailwindcss": "^3.3.2",
     "ts-loader": "^9.4.2",
     "typescript": "5.4.5",
-    "web-vitals": "^3.3.1",
+    "web-vitals": "^4.0.0",
     "webpack": "^5.82.0",
     "webpack-cli": "^5.0.2",
     "webpack-dev-server": "^5.0.0"
