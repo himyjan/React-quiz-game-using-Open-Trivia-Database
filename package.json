@@ -15,10 +15,10 @@
     "@mantine/notifications": "^7.0.0",
     "clsx": "^2.0.0",
     "ofetch": "^1.0.1",
-    "react": "^18.2.0",
+    "react": "^19.0.0",
     "react-charts": "^3.0.0-beta.54",
     "react-countdown-circle-timer": "^3.2.1",
-    "react-dom": "^18.2.0",
+    "react-dom": "^19.0.0",
     "react-resizable": "^3.0.5"
   },
   "devDependencies": {
@@ -32,8 +32,8 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.5.1",
     "@types/node": "^22.0.0",
-    "@types/react": "^18.2.3",
-    "@types/react-dom": "^18.2.3",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.14",
     "babel-loader": "^9.1.2",
     "cross-env": "^7.0.3",
