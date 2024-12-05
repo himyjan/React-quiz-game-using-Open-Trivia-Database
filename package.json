@@ -42,7 +42,7 @@
     "html-webpack-plugin": "^5.5.1",
     "postcss": "^8.4.23",
     "postcss-loader": "^8.0.0",
-    "react-refresh": "^0.14.0",
+    "react-refresh": "^0.16.0",
     "react-refresh-typescript": "^2.0.9",
     "sass": "^1.62.1",
     "sass-loader": "^16.0.0",
