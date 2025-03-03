@@ -1,7 +1,7 @@
 import { useState, Fragment, useRef } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxOptions, DialogTitle, DialogPanel, Transition, TransitionChild, Dialog } from '@headlessui/react';
-import { showNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import clsx from 'clsx';
 import api from '../utils/api';
 import RightWrongStatisticsChart from './ui/rightWrongStatisticsChart';
@@ -177,7 +177,7 @@ const Quiz = () => {
     const difficulty = data.results[0].difficulty;
     const category = data.results[0].category;
     if (theText === data.results[0].correct_answer) {
-      showNotification({
+      notifications.show({
         title: 'correct answer',
         message: `The, currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&") }`,
       });
@@ -191,7 +191,7 @@ const Quiz = () => {
         return preScore;
       });
     } else {
-      showNotification({
+      notifications.show({
         title: 'wrong answer  ',
         message: `The, currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&") }`,
       });
@@ -246,7 +246,7 @@ const Quiz = () => {
           colorsTime={[7, 5, 2, 0]}
           onComplete={() => {
             getApiQuiz();
-            showNotification({
+            notifications.show({
               title: 'time up',
               message: '',
             });
