@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { MantineProvider } from '@mantine/core';
+import '@mantine/notifications/styles.css';
 import { Notifications } from '@mantine/notifications';
 import './index.css';
 import App from './App';
