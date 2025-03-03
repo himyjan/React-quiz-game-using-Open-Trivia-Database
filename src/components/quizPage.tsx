@@ -1,4 +1,4 @@
-import { useState, Fragment, useRef, useMemo } from 'react';
+import { useState, Fragment, useRef } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Combobox, DialogTitle, DialogPanel, Transition, Dialog } from '@headlessui/react';
 import { showNotification } from '@mantine/notifications';
@@ -91,11 +91,11 @@ const Quiz = () => {
     query === ''
       ? filterOptions
       : filterOptions.filter((option: filterOptionType) =>
-          option.name
-            .toLowerCase()
-            .replace(/\s+/g, '')
-            .includes(query.toLowerCase().replace(/\s+/g, ''))
-        );
+        option.name
+          .toLowerCase()
+          .replace(/\s+/g, '')
+          .includes(query.toLowerCase().replace(/\s+/g, ''))
+      );
 
   if (isOpen === true) {
     chartData = [
@@ -266,10 +266,10 @@ const Quiz = () => {
         category: {data.results[0].category}
       </div>
       <div className='flex max-w-[680px] text-[24px] text-blue-800'>
-        {data.results[0].question.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}
+        {data.results[0].question.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}
       </div>
 
-      {useMemo(() => showAnswer(data, quizAnswerClick), [data])}
+      {showAnswer(data, quizAnswerClick)}
 
       <div className='fixed flex top-0 left-0'>
         <button
@@ -369,10 +369,9 @@ const Quiz = () => {
                                   <Combobox.Option
                                     key={option.id}
                                     className={({ active }) =>
-                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                        active
-                                          ? 'bg-teal-600 text-white'
-                                          : 'text-gray-900'
+                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active
+                                        ? 'bg-teal-600 text-white'
+                                        : 'text-gray-900'
                                       }`
                                     }
                                     value={option}
@@ -380,21 +379,19 @@ const Quiz = () => {
                                     {({ selected, active }) => (
                                       <>
                                         <span
-                                          className={`block truncate ${
-                                            selected
-                                              ? 'font-medium'
-                                              : 'font-normal'
-                                          }`}
+                                          className={`block truncate ${selected
+                                            ? 'font-medium'
+                                            : 'font-normal'
+                                            }`}
                                         >
                                           {option.name}
                                         </span>
                                         {selected ? (
                                           <span
-                                            className={`absolute z- inset-y-0 left-0 flex items-center pl-3 ${
-                                              active
-                                                ? 'text-white'
-                                                : 'text-teal-600'
-                                            }`}
+                                            className={`absolute z- inset-y-0 left-0 flex items-center pl-3 ${active
+                                              ? 'text-white'
+                                              : 'text-teal-600'
+                                              }`}
                                           >
                                             <CheckIcon
                                               className='h-5 w-5'
@@ -450,9 +447,9 @@ function showAnswer(
         onClick={quizAnswerClick}
         value='this is the value'
         className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-        key={answer}
+        key={answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}
       >
-        {answer}
+        {answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}
       </button>
     ));
 }
