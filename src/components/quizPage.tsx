@@ -1,7 +1,7 @@
-import { useState, Fragment, useRef } from 'react';
+import { useState, Fragment, useRef, useMemo } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxOptions, DialogTitle, DialogPanel, Transition, TransitionChild, Dialog } from '@headlessui/react';
-import { notifications } from '@mantine/notifications';
+import toast, { Toaster } from 'react-hot-toast';
 import clsx from 'clsx';
 import api from '../utils/api';
 import RightWrongStatisticsChart from './ui/rightWrongStatisticsChart';
@@ -177,10 +177,7 @@ const Quiz = () => {
     const difficulty = data.results[0].difficulty;
     const category = data.results[0].category;
     if (theText === data.results[0].correct_answer) {
-      notifications.show({
-        title: 'correct answer',
-        message: `The, currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&") }`,
-      });
+      toast(`Currect answer, The currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}`, { position: 'bottom-right', icon: '🎉' });
       setScore((preScore: any) => {
         preScore.hasOwnProperty(difficulty)
           ? (preScore[difficulty][0] += 1)
@@ -191,10 +188,7 @@ const Quiz = () => {
         return preScore;
       });
     } else {
-      notifications.show({
-        title: 'wrong answer  ',
-        message: `The, currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&") }`,
-      });
+      toast(`Wrong answer, The currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}`, { position: 'bottom-right', icon: '❌' });
       setScore((preScore: any) => {
         preScore.hasOwnProperty(difficulty)
           ? (preScore[difficulty][1] += 1)
@@ -246,10 +240,7 @@ const Quiz = () => {
           colorsTime={[7, 5, 2, 0]}
           onComplete={() => {
             getApiQuiz();
-            notifications.show({
-              title: 'time up',
-              message: '',
-            });
+            toast('time up', { position: 'bottom-right', icon: '⏰' });
             setIsPlaying(true);
             // do your stuff here
             return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
@@ -269,7 +260,7 @@ const Quiz = () => {
         {data.results[0].question.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}
       </div>
 
-      {showAnswer(data, quizAnswerClick)}
+      {useMemo(() => showAnswer(data, quizAnswerClick), [data])}
 
       <div className='fixed flex top-0 left-0'>
         <button
@@ -296,6 +287,7 @@ const Quiz = () => {
       </div>
 
       {scoreBarPopupModule()}
+      <Toaster />
     </div>
   );
 
@@ -369,10 +361,9 @@ const Quiz = () => {
                                   <ComboboxOption
                                     key={option.id}
                                     className={({ focus }) =>
-                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                        focus
-                                          ? 'bg-teal-600 text-white'
-                                          : 'text-gray-900'
+                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${focus
+                                        ? 'bg-teal-600 text-white'
+                                        : 'text-gray-900'
                                       }`
                                     }
                                     value={option}
@@ -389,11 +380,10 @@ const Quiz = () => {
                                         </span>
                                         {selected ? (
                                           <span
-                                            className={`absolute z- inset-y-0 left-0 flex items-center pl-3 ${
-                                              focus
-                                                ? 'text-white'
-                                                : 'text-teal-600'
-                                            }`}
+                                            className={`absolute z- inset-y-0 left-0 flex items-center pl-3 ${focus
+                                              ? 'text-white'
+                                              : 'text-teal-600'
+                                              }`}
                                           >
                                             <CheckIcon
                                               className='h-5 w-5'

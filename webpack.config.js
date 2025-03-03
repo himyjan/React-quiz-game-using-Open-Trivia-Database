@@ -42,11 +42,6 @@ module.exports = {
             options: {
               configFile: isDevelopment ? 'tsconfig.dev.json' : 'tsconfig.json',
               transpileOnly: true,
-              ...(isDevelopment && {
-                getCustomTransformers: () => ({
-                  before: [require('react-refresh-typescript')()],
-                }),
-              }),
             },
           },
         ],
