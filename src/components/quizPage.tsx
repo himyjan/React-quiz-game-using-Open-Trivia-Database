@@ -179,7 +179,7 @@ const Quiz = () => {
     if (theText === data.results[0].correct_answer) {
       showNotification({
         title: 'correct answer',
-        message: `The, currect answer is ${data.results[0].correct_answer}`,
+        message: `The, currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&") }`,
       });
       setScore((preScore: any) => {
         preScore.hasOwnProperty(difficulty)
@@ -193,7 +193,7 @@ const Quiz = () => {
     } else {
       showNotification({
         title: 'wrong answer  ',
-        message: `The, currect answer is ${data.results[0].correct_answer}`,
+        message: `The, currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&") }`,
       });
       setScore((preScore: any) => {
         preScore.hasOwnProperty(difficulty)
