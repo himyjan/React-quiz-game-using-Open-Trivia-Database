@@ -1,6 +1,6 @@
 import { useState, Fragment, useRef } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import { Combobox, DialogTitle, DialogPanel, Transition, Dialog } from '@headlessui/react';
+import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxOptions, DialogTitle, DialogPanel, Transition, TransitionChild, Dialog } from '@headlessui/react';
 import { showNotification } from '@mantine/notifications';
 import clsx from 'clsx';
 import api from '../utils/api';
@@ -303,7 +303,7 @@ const Quiz = () => {
     return (
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={closeModal}>
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter='ease-out duration-300'
             enterFrom='opacity-0'
@@ -313,11 +313,11 @@ const Quiz = () => {
             leaveTo='opacity-0'
           >
             <div className='fixed inset-0 bg-black bg-opacity-25' />
-          </Transition.Child>
+          </TransitionChild>
 
           <div className='fixed inset-0 overflow-y-auto'>
             <div className='flex min-h-full items-center justify-center p-4 text-center'>
-              <Transition.Child
+              <TransitionChild
                 as={Fragment}
                 enter='ease-out duration-300'
                 enterFrom='opacity-0 scale-95'
@@ -338,19 +338,19 @@ const Quiz = () => {
                       <Combobox value={selected} onChange={setSelected as any}>
                         <div className='relative mt-1'>
                           <div className='relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
-                            <Combobox.Input
+                            <ComboboxInput
                               className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0'
                               displayValue={(option: filterOptionType) =>
                                 option.name
                               }
                               onChange={(event) => setQuery(event.target.value)}
                             />
-                            <Combobox.Button className='absolute inset-y-0 right-0 flex items-center pr-2'>
+                            <ComboboxButton className='absolute inset-y-0 right-0 flex items-center pr-2'>
                               <ChevronUpDownIcon
                                 className='h-5 w-5 text-gray-400'
                                 aria-hidden='true'
                               />
-                            </Combobox.Button>
+                            </ComboboxButton>
                           </div>
                           <Transition
                             as={Fragment}
@@ -359,24 +359,25 @@ const Quiz = () => {
                             leaveTo='opacity-0'
                             afterLeave={() => setQuery('')}
                           >
-                            <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+                            <ComboboxOptions className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
                               {filteredResult.length === 0 && query !== '' ? (
                                 <div className='relative cursor-default select-none py-2 px-4 text-gray-700'>
                                   Nothing found.
                                 </div>
                               ) : (
                                 filteredResult.map((option) => (
-                                  <Combobox.Option
+                                  <ComboboxOption
                                     key={option.id}
-                                    className={({ active }) =>
-                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active
-                                        ? 'bg-teal-600 text-white'
-                                        : 'text-gray-900'
+                                    className={({ focus }) =>
+                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                        focus
+                                          ? 'bg-teal-600 text-white'
+                                          : 'text-gray-900'
                                       }`
                                     }
                                     value={option}
                                   >
-                                    {({ selected, active }) => (
+                                    {({ selected, focus }) => (
                                       <>
                                         <span
                                           className={`block truncate ${selected
@@ -388,10 +389,11 @@ const Quiz = () => {
                                         </span>
                                         {selected ? (
                                           <span
-                                            className={`absolute z- inset-y-0 left-0 flex items-center pl-3 ${active
-                                              ? 'text-white'
-                                              : 'text-teal-600'
-                                              }`}
+                                            className={`absolute z- inset-y-0 left-0 flex items-center pl-3 ${
+                                              focus
+                                                ? 'text-white'
+                                                : 'text-teal-600'
+                                            }`}
                                           >
                                             <CheckIcon
                                               className='h-5 w-5'
@@ -401,10 +403,10 @@ const Quiz = () => {
                                         ) : null}
                                       </>
                                     )}
-                                  </Combobox.Option>
+                                  </ComboboxOption>
                                 ))
                               )}
-                            </Combobox.Options>
+                            </ComboboxOptions>
                           </Transition>
                         </div>
                       </Combobox>
@@ -422,7 +424,7 @@ const Quiz = () => {
                     </button>
                   </div>
                 </DialogPanel>
-              </Transition.Child>
+              </TransitionChild>
             </div>
           </div>
         </Dialog>
