@@ -20,7 +20,7 @@ module.exports = {
   devServer: {
     client: { overlay: false },
     open: true,
-    hot: true, 
+    hot: true,
   },
   entry: {
     main: './src/' + entries,

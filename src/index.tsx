@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <MantineProvider withNormalizeCSS withGlobalStyles>
+    <MantineProvider {...{ withNormalizeCSS: true, withGlobalStyles: true }}>
       <Notifications />
       <App />
     </MantineProvider>

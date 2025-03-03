@@ -1,6 +1,6 @@
 import { useState, Fragment, useRef, useMemo } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import { Combobox, Dialog, Transition } from '@headlessui/react';
+import { Combobox, DialogTitle, DialogPanel, Transition, Dialog } from '@headlessui/react';
 import { showNotification } from '@mantine/notifications';
 import clsx from 'clsx';
 import api from '../utils/api';
@@ -266,7 +266,7 @@ const Quiz = () => {
         category: {data.results[0].category}
       </div>
       <div className='flex max-w-[680px] text-[24px] text-blue-800'>
-        {data.results[0].question}
+        {data.results[0].question.replace(/&quot;/g, '"').replace(/&#039;/g, "'")}
       </div>
 
       {useMemo(() => showAnswer(data, quizAnswerClick), [data])}
@@ -326,16 +326,16 @@ const Quiz = () => {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
-                  <Dialog.Title
+                <DialogPanel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                  <DialogTitle
                     as='h3'
                     className='text-lg font-medium leading-6 text-gray-900'
                   >
                     Right/wrong answers chart
-                  </Dialog.Title>
+                  </DialogTitle>
                   <div className='mt-2  '>
                     <div className='fixed top-[15px] right-[20px] w-[150px]'>
-                      <Combobox value={selected} onChange={setSelected}>
+                      <Combobox value={selected} onChange={setSelected as any}>
                         <div className='relative mt-1'>
                           <div className='relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
                             <Combobox.Input
@@ -424,7 +424,7 @@ const Quiz = () => {
                       Got it, thanks!
                     </button>
                   </div>
-                </Dialog.Panel>
+                </DialogPanel>
               </Transition.Child>
             </div>
           </div>
@@ -444,7 +444,7 @@ function showAnswer(
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value) // suffle
-    .map((answer, index) => (
+    .map((answer) => (
       <button
         type='button'
         onClick={quizAnswerClick}
