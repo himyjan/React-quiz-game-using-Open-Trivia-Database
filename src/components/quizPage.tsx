@@ -1,7 +1,7 @@
 import { useState, Fragment, useRef, useMemo } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import { Combobox, Dialog, Transition } from '@headlessui/react';
-import { showNotification } from '@mantine/notifications';
+import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxOptions, DialogTitle, DialogPanel, Transition, TransitionChild, Dialog } from '@headlessui/react';
+import toast, { Toaster } from 'react-hot-toast';
 import clsx from 'clsx';
 import api from '../utils/api';
 import RightWrongStatisticsChart from './ui/rightWrongStatisticsChart';
@@ -91,11 +91,11 @@ const Quiz = () => {
     query === ''
       ? filterOptions
       : filterOptions.filter((option: filterOptionType) =>
-          option.name
-            .toLowerCase()
-            .replace(/\s+/g, '')
-            .includes(query.toLowerCase().replace(/\s+/g, ''))
-        );
+        option.name
+          .toLowerCase()
+          .replace(/\s+/g, '')
+          .includes(query.toLowerCase().replace(/\s+/g, ''))
+      );
 
   if (isOpen === true) {
     chartData = [
@@ -177,10 +177,7 @@ const Quiz = () => {
     const difficulty = data.results[0].difficulty;
     const category = data.results[0].category;
     if (theText === data.results[0].correct_answer) {
-      showNotification({
-        title: 'correct answer',
-        message: `The, currect answer is ${data.results[0].correct_answer}`,
-      });
+      toast(`Currect answer, The currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}`, { position: 'bottom-right', icon: '🎉' });
       setScore((preScore: any) => {
         preScore.hasOwnProperty(difficulty)
           ? (preScore[difficulty][0] += 1)
@@ -191,10 +188,7 @@ const Quiz = () => {
         return preScore;
       });
     } else {
-      showNotification({
-        title: 'wrong answer  ',
-        message: `The, currect answer is ${data.results[0].correct_answer}`,
-      });
+      toast(`Wrong answer, The currect answer is ${data.results[0].correct_answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}`, { position: 'bottom-right', icon: '❌' });
       setScore((preScore: any) => {
         preScore.hasOwnProperty(difficulty)
           ? (preScore[difficulty][1] += 1)
@@ -246,10 +240,7 @@ const Quiz = () => {
           colorsTime={[7, 5, 2, 0]}
           onComplete={() => {
             getApiQuiz();
-            showNotification({
-              title: 'time up',
-              message: '',
-            });
+            toast('time up', { position: 'bottom-right', icon: '⏰' });
             setIsPlaying(true);
             // do your stuff here
             return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
@@ -266,7 +257,7 @@ const Quiz = () => {
         category: {data.results[0].category}
       </div>
       <div className='flex max-w-[680px] text-[24px] text-blue-800'>
-        {data.results[0].question}
+        {data.results[0].question.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}
       </div>
 
       {useMemo(() => showAnswer(data, quizAnswerClick), [data])}
@@ -296,6 +287,7 @@ const Quiz = () => {
       </div>
 
       {scoreBarPopupModule()}
+      <Toaster />
     </div>
   );
 
@@ -303,7 +295,7 @@ const Quiz = () => {
     return (
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={closeModal}>
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter='ease-out duration-300'
             enterFrom='opacity-0'
@@ -313,11 +305,11 @@ const Quiz = () => {
             leaveTo='opacity-0'
           >
             <div className='fixed inset-0 bg-black bg-opacity-25' />
-          </Transition.Child>
+          </TransitionChild>
 
           <div className='fixed inset-0 overflow-y-auto'>
             <div className='flex min-h-full items-center justify-center p-4 text-center'>
-              <Transition.Child
+              <TransitionChild
                 as={Fragment}
                 enter='ease-out duration-300'
                 enterFrom='opacity-0 scale-95'
@@ -326,31 +318,31 @@ const Quiz = () => {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
-                  <Dialog.Title
+                <DialogPanel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                  <DialogTitle
                     as='h3'
                     className='text-lg font-medium leading-6 text-gray-900'
                   >
                     Right/wrong answers chart
-                  </Dialog.Title>
+                  </DialogTitle>
                   <div className='mt-2  '>
                     <div className='fixed top-[15px] right-[20px] w-[150px]'>
-                      <Combobox value={selected} onChange={setSelected}>
+                      <Combobox value={selected} onChange={setSelected as any}>
                         <div className='relative mt-1'>
                           <div className='relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
-                            <Combobox.Input
+                            <ComboboxInput
                               className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0'
                               displayValue={(option: filterOptionType) =>
                                 option.name
                               }
                               onChange={(event) => setQuery(event.target.value)}
                             />
-                            <Combobox.Button className='absolute inset-y-0 right-0 flex items-center pr-2'>
+                            <ComboboxButton className='absolute inset-y-0 right-0 flex items-center pr-2'>
                               <ChevronUpDownIcon
                                 className='h-5 w-5 text-gray-400'
                                 aria-hidden='true'
                               />
-                            </Combobox.Button>
+                            </ComboboxButton>
                           </div>
                           <Transition
                             as={Fragment}
@@ -359,42 +351,39 @@ const Quiz = () => {
                             leaveTo='opacity-0'
                             afterLeave={() => setQuery('')}
                           >
-                            <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+                            <ComboboxOptions className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
                               {filteredResult.length === 0 && query !== '' ? (
                                 <div className='relative cursor-default select-none py-2 px-4 text-gray-700'>
                                   Nothing found.
                                 </div>
                               ) : (
                                 filteredResult.map((option) => (
-                                  <Combobox.Option
+                                  <ComboboxOption
                                     key={option.id}
-                                    className={({ active }) =>
-                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                        active
-                                          ? 'bg-teal-600 text-white'
-                                          : 'text-gray-900'
+                                    className={({ focus }) =>
+                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${focus
+                                        ? 'bg-teal-600 text-white'
+                                        : 'text-gray-900'
                                       }`
                                     }
                                     value={option}
                                   >
-                                    {({ selected, active }) => (
+                                    {({ selected, focus }) => (
                                       <>
                                         <span
-                                          className={`block truncate ${
-                                            selected
-                                              ? 'font-medium'
-                                              : 'font-normal'
-                                          }`}
+                                          className={`block truncate ${selected
+                                            ? 'font-medium'
+                                            : 'font-normal'
+                                            }`}
                                         >
                                           {option.name}
                                         </span>
                                         {selected ? (
                                           <span
-                                            className={`absolute z- inset-y-0 left-0 flex items-center pl-3 ${
-                                              active
-                                                ? 'text-white'
-                                                : 'text-teal-600'
-                                            }`}
+                                            className={`absolute z- inset-y-0 left-0 flex items-center pl-3 ${focus
+                                              ? 'text-white'
+                                              : 'text-teal-600'
+                                              }`}
                                           >
                                             <CheckIcon
                                               className='h-5 w-5'
@@ -404,10 +393,10 @@ const Quiz = () => {
                                         ) : null}
                                       </>
                                     )}
-                                  </Combobox.Option>
+                                  </ComboboxOption>
                                 ))
                               )}
-                            </Combobox.Options>
+                            </ComboboxOptions>
                           </Transition>
                         </div>
                       </Combobox>
@@ -424,8 +413,8 @@ const Quiz = () => {
                       Got it, thanks!
                     </button>
                   </div>
-                </Dialog.Panel>
-              </Transition.Child>
+                </DialogPanel>
+              </TransitionChild>
             </div>
           </div>
         </Dialog>
@@ -444,15 +433,15 @@ function showAnswer(
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value) // suffle
-    .map((answer, index) => (
+    .map((answer) => (
       <button
         type='button'
         onClick={quizAnswerClick}
         value='this is the value'
         className='rounded-md bg-black bg-opacity-20 px-4 py-2 mt-[10px] text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-        key={answer}
+        key={answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}
       >
-        {answer}
+        {answer.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&")}
       </button>
     ));
 }

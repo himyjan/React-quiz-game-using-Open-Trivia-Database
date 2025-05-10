@@ -1,22 +1,46 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2024",
+    "module": "ESNext",
     "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "module": "commonjs",
+    "jsx": "react-jsx",
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+
+    "outDir": "./build/",
+    "noImplicitAny": true,
+
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noUnusedParameters": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "skipLibCheck": true,
+    "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "noEmit": true,
+    "strict": true,
+
+    // "noImplicitReturns": true, // подчеркивает  any
+    // "noUncheckedIndexedAccess": true,  // ругается на any
+    "noPropertyAccessFromIndexSignature": false, //ругается на styles.button...
+    "noUnusedLocals": false, // запрещает оставлять неиспользуемый код
+
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
+  "include": ["src/**/*.tsx", "src/**/*.ts", "global.d.ts"],
+  "exclude": ["node_modules", "src/**/*.test.ts"]
 }
