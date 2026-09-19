@@ -51,6 +51,6 @@
     "web-vitals": "^5.0.0",
     "webpack": "^5.99.8",
     "webpack-cli": "^7.0.0",
-    "webpack-dev-server": "^5.2.1"
+    "webpack-dev-server": "^6.0.0"
   }
 }
